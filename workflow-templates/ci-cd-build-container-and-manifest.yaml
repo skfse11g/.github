@@ -3,9 +3,9 @@ name: Build a Docker image, Push it to ACR and update manifest
 env:
   acr_repo: '***.azurecr.io' # use your acr repo
   container_name: 'some_name' # name of the container
-  vault_name: 'se-11g-prd-kv' # keyvault of choice
-  build_context: './SFL.WebApi' # relative to root of build repo
-  manifest_path: './got/some_app' # path to manifest inputs in the manifest repo
+  vault_name: 'vault-name' # keyvault of choice
+  build_context: './path/to/dockerfile' # relative to root of build repo
+  manifest_path: './path/to/manifests' # path to manifest inputs in the manifest repo
 # only run workflow when a new version is released. The docker image will get
 # the version tag and the 'latest' tag
 on:
