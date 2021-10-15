@@ -1,6 +1,6 @@
 {
-    "name": "SKFSE11G Organization Workflow",
-    "description": "SKFSE11G CI/CD workflow template",
+    "name": "Publish to acr and update manifests",
+    "description": "Build a Docker image, Push it to ACR and update manifest",
     "iconName": "default"
     
 }
