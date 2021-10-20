@@ -3,7 +3,7 @@ name: Build a Docker image, Push it to ACR and update manifest
 env:
   acr_repo: '***.azurecr.io' # use your acr repo
   container_name: 'some_name' # name of the container
-  application_name: 'application name' 
+  var_file_name: 'variables.libsonnet' # set a clever name
   build_context: './path/to/dockerfile' # relative to root of build repo
   manifest_path: './path/to/manifests' # path to manifest inputs in the manifest repo
 # only run workflow when a new version is released. The docker image will get
@@ -38,15 +38,6 @@ jobs:
          push: true
          tags: ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}}
             
-      #- name: Build the tagged Docker image
-      #  run: docker build -f ${{env.build_context}}/Dockerfile -t ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}} .
-      #- name: Push the tagged Docker image
-      #  run: docker push ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}}
-      #- name: Build the latest Docker image
-      #  run: docker build -f ${{env.build_context}}/Dockerfile  -t ${{env.acr_repo}}/${{env.container_name}}:latest .
-      #- name: Push the latest Docker image
-      #  run: docker push ${{env.acr_repo}}/${{env.container_name}}:latest
-      
       - uses: actions/checkout@v2
         name: Checkout Manifests 
         with:
@@ -54,10 +45,9 @@ jobs:
           token: ${{secrets.PAT}}
       - name: update manifest
         run: |
-          echo -n ${{steps.vars.outputs.tag}} > version.txt
-          echo -n ${{env.container_name}} > container.txt
-          echo -n ${{env.acr_repo}} > registry.txt
-        working-directory: ${{env.manifest_path}}
+          mkdir -p ${{env.manifest_path}}
+          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: '${{env.container_name}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.var_file_name}}
+        working-directory: .
       - name: Commit changes
         run: |
           git config --global user.name 'skfse11g'
