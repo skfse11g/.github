@@ -54,9 +54,9 @@ jobs:
           token: ${{secrets.PAT}}
       - name: update manifest
         run: |
-          #echo ${{steps.vars.outputs.tag}} > version.txt
-          #echo ${{env.container_name}} > container.txt
-          #echo ${{env.acr_repo}} > registry.txt
+          echo ${{steps.vars.outputs.tag}} > version.txt
+          echo ${{env.container_name}} > container.txt
+          echo ${{env.acr_repo}} > registry.txt
         working-directory: ${{env.manifest_path}}
       - name: Commit changes
         run: |
