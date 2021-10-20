@@ -55,8 +55,7 @@ jobs:
         working-directory: ${{env.manifest_path}}
       - name: Commit changes
         run: |
-          git config --global user.name 'Christer Bosvik'
-          git config --global user.email 'christer.bosvik@skf.com'
+          git config --global user.name 'skfse11g'
           git add .
           git commit -am "Updates to ${{steps.vars.outputs.tag}}"
           git push
