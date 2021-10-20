@@ -31,15 +31,21 @@ jobs:
       - name: Get the version
         id: vars
         run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
-      
       - name: Build the tagged Docker image
-        run: docker build -f ${{env.build_context}}/Dockerfile -t ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}} .
-      - name: Push the tagged Docker image
-        run: docker push ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}}
-      - name: Build the latest Docker image
-        run: docker build -f ${{env.build_context}}/Dockerfile  -t ${{env.acr_repo}}/${{env.container_name}}:latest .
-      - name: Push the latest Docker image
-        run: docker push ${{env.acr_repo}}/${{env.container_name}}:latest
+        uses: docker/build-push-action@v2
+        with:
+         context: ${{env.build_context}}
+         push: true
+         tags: ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}}
+            
+      #- name: Build the tagged Docker image
+      #  run: docker build -f ${{env.build_context}}/Dockerfile -t ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}} .
+      #- name: Push the tagged Docker image
+      #  run: docker push ${{env.acr_repo}}/${{env.container_name}}:${{steps.vars.outputs.tag}}
+      #- name: Build the latest Docker image
+      #  run: docker build -f ${{env.build_context}}/Dockerfile  -t ${{env.acr_repo}}/${{env.container_name}}:latest .
+      #- name: Push the latest Docker image
+      #  run: docker push ${{env.acr_repo}}/${{env.container_name}}:latest
       
       - uses: actions/checkout@v2
         name: Checkout Manifests 
@@ -48,11 +54,9 @@ jobs:
           token: ${{secrets.PAT}}
       - name: update manifest
         run: |
-          echo "{\"container_tag\": \"${{steps.vars.outputs.tag}}\", \"container_name\": \"${{env.container_name}}\", \"container_registry\": \"${{env.acr_repo}}\"} > ${{env.application_name}}.json
           #echo ${{steps.vars.outputs.tag}} > version.txt
           #echo ${{env.container_name}} > container.txt
           #echo ${{env.acr_repo}} > registry.txt
-          #echo ${{env.vault_name}} > vault.txt
         working-directory: ${{env.manifest_path}}
       - name: Commit changes
         run: |
