@@ -1,0 +1,6 @@
+{
+    "name": "Publish to acr and update manifests",
+    "description": "Build a Docker image tagged with commit hash, Push it to ACR and update manifest",
+    "iconName": "default"
+    
+}
