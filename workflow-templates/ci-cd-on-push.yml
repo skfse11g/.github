@@ -62,5 +62,5 @@ jobs:
         run: |
           git config --global user.name 'skfse11g'
           git add .
-          git commit -am "Updates to latest"
+          git commit -am "Updates to ${{ steps.vars.outputs.sha_short }}"
           git push
