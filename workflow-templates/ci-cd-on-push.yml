@@ -1,26 +1,25 @@
-
 name: Build a Docker image, Push it to ACR and update manifest
 # ENV section is mandatory
 env:
-  acr_repo: '***.azurecr.io' # use your acr repo
-  container_name: 'some-name' # name of the container
-  var_file_name: 'some.name.libsonnet'
-  build_context: './path/to/dockerfile' # relative to root of build repo
-  manifest_path: './path/to/manifests' # path to manifest inputs in the manifest repo
+  acr_repo: "***.azurecr.io" # use your acr repo
+  container_name: "some-name" # name of the container
+  var_file_name: "some.name.libsonnet"
+  build_context: "./path/to/dockerfile" # relative to root of build repo
+  manifest_path: "./path/to/manifests" # path to manifest inputs in the manifest repo
 # only run workflow when a new version is released. The docker image will get
 # the version tag and the 'latest' tag
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:  
+    steps:
       - name: Checkout build repo
         uses: actions/checkout@v2
 
@@ -30,7 +29,7 @@ jobs:
           login-server: ${{env.acr_repo}}
           username: ${{ secrets.SKFSE11GACR_USER }}
           password: ${{ secrets.SKFSE11GACR_PASSWORD }}
-    # Get the hash of the commit
+      # Get the hash of the commit
       - name: get hash
         id: vars
         shell: bash
@@ -40,16 +39,17 @@ jobs:
       - name: Build the tagged Docker image
         uses: docker/build-push-action@v2
         with:
-         context: ${{env.build_context}}
-         push: true
-         tags: ${{env.acr_repo}}/${{env.container_name}}:${{ steps.vars.outputs.sha_short }}
-            
+          context: .
+          file: ${{env.build_context}}/Dockerfile
+          push: true
+          tags: ${{env.acr_repo}}/${{env.container_name}}:${{ steps.vars.outputs.sha_short }}
+
       - uses: actions/checkout@v2
-        name: Checkout Manifests 
+        name: Checkout Manifests
         with:
           repository: ${{github.repository_owner}}/${{secrets.MANIFESTS}}
           token: ${{secrets.PAT}}
-          
+
       - name: update manifest
         run: |
           mkdir -p ${{env.manifest_path}}
