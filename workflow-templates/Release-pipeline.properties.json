@@ -1,0 +1,6 @@
+{
+    "name": "Release Application",
+    "description": "Deploy app to production on Release",
+    "iconName": "deFacto"
+    
+}
