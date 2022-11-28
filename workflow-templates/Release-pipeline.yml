@@ -1,4 +1,4 @@
-name: Build a Docker image, Push it to ACR and update manifest
+name: Release-pipeline
 # ENV section is mandatory
 env:
   app_name: 'some_name' # name of the app
@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:  
       - name: Checkout build repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: login to ACR
         uses: azure/docker-login@v1
@@ -32,16 +32,16 @@ jobs:
 
       - name: Get the version
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF/refs\/tags\//}
+        run: echo "tag=${{ github.head_ref || github.ref_name }}-$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
       - name: Build the tagged Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
          context: .
          file: ${{env.build_context}}/Dockerfile
          push: true
          tags: ${{env.acr_repo}}/${{env.app_name}}:${{steps.vars.outputs.tag}}
             
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout Manifests 
         with:
           repository: ${{github.repository_owner}}/${{secrets.MANIFESTS}}
