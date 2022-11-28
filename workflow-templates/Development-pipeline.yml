@@ -7,7 +7,7 @@ env:
 ##########################################
   acr_repo: 'skfse11gacr.azurecr.io' # use your acr repo
   environment: 'dev'
-  manifest_path: ./$team/$app_name/$env.environment
+  manifest_path: ./$team/$app_name/$environment
 # only run workflow when a new version is released. The docker image will get
 # the version tag and the 'latest' tag
 on:
