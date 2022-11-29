@@ -1,6 +1,0 @@
-{
-    "name": "Publish to acr and update manifests on Release",
-    "description": "Build a Docker image, Push it to ACR and update manifest",
-    "iconName": "default"
-    
-}
