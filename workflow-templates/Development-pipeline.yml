@@ -43,7 +43,7 @@ jobs:
          context: .
          file: ${{env.build_context}}/Dockerfile
          push: true
-         tags: ${{env.acr_repo}}/${{container_tag}}:${{steps.vars.outputs.tag}}
+         tags: ${{env.acr_repo}}/${{env.container_tag}}:${{steps.vars.outputs.tag}}
             
       - uses: actions/checkout@v3
         name: Checkout Manifests 
