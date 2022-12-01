@@ -9,7 +9,6 @@ env:
   acr_repo: 'skfse11gacr.azurecr.io' # use your acr repo
   environment: 'dev'
   manifest_path: ./$team/$app_name/$environment
-  container_tag: skfse11g-$team-$container_name
 # only run workflow when a new version is released. The docker image will get
 # the version tag and the 'latest' tag
 on:
@@ -43,7 +42,7 @@ jobs:
          context: .
          file: ${{env.build_context}}/Dockerfile
          push: true
-         tags: ${{env.acr_repo}}/${{env.container_tag}}:${{steps.vars.outputs.tag}}
+         tags: ${{env.acr_repo}}/skfse11g-${{env.team}}-${{env.container_tag}}:${{steps.vars.outputs.tag}}
             
       - uses: actions/checkout@v3
         name: Checkout Manifests 
@@ -53,7 +52,7 @@ jobs:
       - name: update manifest
         run: |
           mkdir -p ${{env.manifest_path}} 
-          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: '${{env.container_tag}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.container_name}}.libsonnet
+          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: 'skfse11g-${{env.team}}-${{env.container_name}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.container_name}}.libsonnet
         working-directory: .
       - name: Commit changes
         run: |
