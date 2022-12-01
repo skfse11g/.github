@@ -5,10 +5,8 @@ env:
   container_name: $app_name # normally same ass app_name but change it if you will deploy ui + api for example.
   build_context: './path/to/dockerfile' # relative to root of build repo
   team: 'your team' # d, e, got, itot etc. 
-##########################################
   acr_repo: 'skfse11gacr.azurecr.io' # use your acr repo
   environment: 'dev'
-  manifest_path: ./$team/$app_name/$environment
 # only run workflow when a new version is released. The docker image will get
 # the version tag and the 'latest' tag
 on:
@@ -51,8 +49,8 @@ jobs:
           token: ${{secrets.PAT}}
       - name: update manifest
         run: |
-          mkdir -p ${{env.manifest_path}} 
-          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: 'skfse11g-${{env.team}}-${{env.container_name}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.container_name}}.libsonnet
+          mkdir -p ./${{env.team}}/${{env.app_name}}/${{env.environment}} 
+          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: 'skfse11g-${{env.team}}-${{env.container_name}}', repository: '${{env.acr_repo}}'}" > ./${{env.team}}/${{env.app_name}}/${{env.environment}}/${{env.container_name}}.libsonnet
         working-directory: .
       - name: Commit changes
         run: |
