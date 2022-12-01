@@ -53,7 +53,7 @@ jobs:
       - name: update manifest
         run: |
           mkdir -p ${{env.manifest_path}} 
-          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: '${{env.containerTag}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.app_name}}.libsonnet
+          echo "{tag: '${{steps.vars.outputs.tag}}', containerName: '${{env.containerTag}}', repository: '${{env.acr_repo}}'}" > ${{env.manifest_path}}/${{env.container_name}}.libsonnet
         working-directory: .
       - name: Commit changes
         run: |
