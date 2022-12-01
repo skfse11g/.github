@@ -2,7 +2,7 @@ name: Release-pipeline
 # ENV section is mandatory
 env:
   app_name: 'some_name' # name of the app. A folder with this name will be createrd in the app of apps folder
-  container_name: $app_name # normally same ass app_name but change it if you will deploy ui + api for example.
+  container_name: 'some_name' # normally same ass app_name but change it if you will deploy ui + api for example.
   build_context: './path/to/dockerfile' # relative to root of build repo
   team: 'your team' # d, e, got, itot etc. 
   acr_repo: 'skfse11gacr.azurecr.io' # use your acr repo
